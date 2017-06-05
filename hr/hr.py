@@ -25,9 +25,27 @@ def start_module():
         None
     """
 
-    # your code
+    menu_list = ['Show table of employees', 'Add employee to register',
+                 'Remove employee from register', 'Update data of employee']
+    message = 'Select number from 0 to 4, pointing the action you want to be done'
 
-    pass
+    ui.print_menu('Human Resources', menu_list, 'Back to main menu')
+    
+    task_selection = ui.get_inputs(['action number: '], 'What to do?')
+    while task_selection[0] not in '12340':
+        ui.print_error_message(message)
+        task_selection = ui.get_inputs(['action number: '], 'What to do?')
+
+    if task_selection[0] == '0':
+        pass
+    elif task_selection[0] == '1':
+        pass
+    elif task_selection[0] == '2':
+        pass
+    elif task_selection[0] == '3':
+        pass
+    elif task_selection[0] == '4':
+        pass
 
 
 def show_table(table):
