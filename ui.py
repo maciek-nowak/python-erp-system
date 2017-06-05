@@ -112,6 +112,4 @@ def print_error_message(message):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
-
-    pass
+    print('Error:', message)
