@@ -34,3 +34,5 @@ def import_from_csv(filename):
         reader = csv.reader(string, delimiter=';')
         for row in reader:
             imported_things.append(row)
+
+    return imported_things
