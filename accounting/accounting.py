@@ -103,7 +103,14 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            index_to_delete = i
+
+    try:
+        table.pop(index_to_delete)
+    except NameError:
+        ui.print_error_message('no item of this id')
 
     return table
 
