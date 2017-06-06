@@ -230,13 +230,13 @@ def count_year_profit(table):
 def which_year_max(table):
 
     year_profit = count_year_profit(table)
+    max_year = table[0][3]
 
-    max_year = int(table[0][3])
     for year in year_profit:
-        if int(year_profit[year]) > max_year:
+        if int(year_profit[year]) > int(year_profit[max_year]):
             max_year = year
 
-    return max_year
+    return int(max_year)
 
 
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
@@ -249,6 +249,6 @@ def avg_amount(table, year):
         if record[3] == year:
             year_transactions += 1
     try:
-        return int(years_profit[year])/int(year)
+        return int(years_profit[year])/int(year_transactions)
     except KeyError:
         ui.print_error_message('no such year in database')
