@@ -26,6 +26,8 @@ def start_module():
         None
     """
 
+    table = data_manager.get_table_from_file('customers.csv')
+
     while True:
         handle_menu()
         try:
@@ -45,7 +47,7 @@ def show_table(table):
         None
     """
 
-    title_list = ['id', 'name', 'price', 'amount', 'reserved', 'year']
+    title_list = ['id', 'name', 'e-mail', 'subscribed']
     ui.print_table(table, title_list)
 
 
@@ -77,8 +79,10 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
-
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            table.pop(i)
+            write_table_to_file('customers.csv', table)
     return table
 
 
@@ -99,6 +103,7 @@ def update(table, id_):
             table = add(table)
             table[-1][0] = id_
             table.insert(i, table.pop())
+            write_table_to_file('customers.csv', table)
     return table
 
 
