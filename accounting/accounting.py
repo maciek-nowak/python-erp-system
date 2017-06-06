@@ -17,6 +17,16 @@ import data_manager
 # common module
 import common
 
+def ask_user_for_data(data_structure):
+    record = []
+    for key in data_structure:
+        user_input = ui.get_inputs([key], '')[0] 
+        while not data_structure[key](user_input):
+            user_input = ui.get_inputs([key], 'Wrong input')[0]
+        if user_input.isdigit():
+            user_input = int(user_input)
+        record.append(user_input)
+    return record
 
 def start_module():
     """
@@ -73,7 +83,7 @@ def add(table):
           }
 
     # append record by data from user
-    record.append(common.ask_user_for_data(ds))
+    record += ask_user_for_data(ds)
 
     # append table by record
     table.append(record)
