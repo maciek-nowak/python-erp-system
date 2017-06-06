@@ -26,9 +26,12 @@ def start_module():
         None
     """
 
-    # your code
-
-    pass
+    while True:
+        handle_menu()
+        try:
+            choose()
+        except KeyError as err:
+            ui.print_error_message(err)
 
 
 def show_table(table):
@@ -42,9 +45,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ['id', 'name', 'price', 'amount', 'reserved', 'year']
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -92,8 +94,11 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
-
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            table = add(table)
+            table[-1][0] = id_
+            table.insert(i, table.pop())
     return table
 
 
