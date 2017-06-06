@@ -24,28 +24,38 @@ def start_module():
     Returns:
         None
     """
-
+    
     menu_list = ['Show table of employees', 'Add employee to register',
                  'Remove employee from register', 'Update data of employee']
-    message = 'Select number from 0 to 4, pointing the action you want to be done'
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    error_message = 'Select number from 0 to 4, pointing the action you want to be done'
+    title = 'Human Resources'
+    table = data_manager.get_table_from_file(file_name)
 
-    ui.print_menu('Human Resources', menu_list, 'Back to main menu')
-    
-    task_selection = ui.get_inputs(['action number: '], 'What to do?')
-    while task_selection[0] not in '12340':
-        ui.print_error_message(message)
-        task_selection = ui.get_inputs(['action number: '], 'What to do?')
+    stay = True
+    while stay:
+        ui.print_menu(title, menu_list, 'Back to main menu')
 
-    if task_selection[0] == '0':
-        pass
-    elif task_selection[0] == '1':
-        pass
-    elif task_selection[0] == '2':
-        pass
-    elif task_selection[0] == '3':
-        pass
-    elif task_selection[0] == '4':
-        pass
+        task_selection = ui.get_inputs(['Please enter a number'], '')
+
+        while not common.is_selection_proper(task_selection, len(menu_list)):
+            task_selection = ui.get_inputs(['Please enter a number'], '')
+            print_error_message(error_message)
+        
+        if task_selection[0] == '1':
+            show_table(table)
+        
+        elif task_selection[0] == '2':
+            add(table)
+        
+        '''elif task_selection[0] == '3':
+            remove(table, id_)
+
+        elif task_selection[0] == 4:
+            update(table, id_)
+        
+        else:
+            stay = False'''
 
 
 def show_table(table):
@@ -58,10 +68,9 @@ def show_table(table):
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    
+    title_list = ['id', 'name', 'year of birth']
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -74,8 +83,6 @@ def add(table):
     Returns:
         Table with a new record
     """
-
-    # your code
 
     return table
 
@@ -92,7 +99,7 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    table = common.remove(table, id_)
 
     return table
 
@@ -109,7 +116,7 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
+    table = common.update(table, id_)
 
     return table
 

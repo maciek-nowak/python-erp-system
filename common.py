@@ -26,3 +26,17 @@ def generate_random(table):
     # your code
 
     return generated
+
+
+def is_selection_proper(task_selection, max_possible_choice):
+    '''
+    checks if input is valid
+    Args:
+        task_selection: list (len(list)=1)
+    Returns:
+        task_selection: list (len(list)=1) cappable to navigate tghrough the program
+    '''
+    if int(task_selection[0]) not in range(max_possible_choice):
+        return False
+    else:
+        return True
