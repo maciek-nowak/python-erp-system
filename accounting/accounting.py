@@ -205,22 +205,50 @@ def update(table, id_):
     return table
 
 
+def count_year_profit(table):
+    years = {}
+    for record in table:
+        year = record[3]
+        profit = 0
+        if record[4] == 'in':
+            profit += int(record[5])
+        elif record[4] == 'out':
+            profit -= int(record[5])
+        if year in years:
+            years[year] += profit
+        else:
+            years[year] = profit
+    return years
+
+
 # special functions:
 # ------------------
 
 # the question: Which year has the highest profit? (profit=in-out)
 # return the answer (number)
+
 def which_year_max(table):
 
-    # your code
+    year_profit = count_year_profit(table)
 
-    pass
+    max_year = int(table[0][3])
+    for year in year_profit:
+        if int(year_profit[year]) > max_year:
+            max_year = year
+
+    return max_year
 
 
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
 # return the answer (number)
 def avg_amount(table, year):
-
-    # your code
-
-    pass
+    year = str(year)
+    years_profit = count_year_profit(table)
+    year_transactions = 0
+    for record in table:
+        if record[3] == year:
+            year_transactions += 1
+    try:
+        return int(years_profit[year])/int(year)
+    except KeyError:
+        ui.print_error_message('no such year in database')
