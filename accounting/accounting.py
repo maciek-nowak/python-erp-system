@@ -17,28 +17,47 @@ import data_manager
 # common module
 import common
 
-def data_structure():
-    '''
 
+def get_data_structure():
+    '''
+    Data container
+
+    Returns:
+        dictionary:
+            key: string containing data name and description of requirements
+            value: lambda function checking compliance of requirements
     '''
     ds = {
           'month (1-12)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 12,
           'day (1-31)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 31,
           'year (1900-9999)': lambda x: x.isdigit() and int(x) >= 1900 and int(x) <= 9999,
           'type (\'in\' or \'out\')': lambda x: x == 'in' or x == 'out',
-          'ammount (dollar)': lambda x: x.isdigit()
+          'amount (dollar)': lambda x: x.isdigit()
          }
 
     return ds
 
+
 def ask_user_for_data(data_structure):
+    """
+    Ask user for data checking for compliance with requirements
+
+    Args:
+        data_structure: dictionary
+    Returns:
+        List containing record
+    """
+
     record = []
     for key in data_structure:
-        user_input = ui.get_inputs([key], '')[0] 
+
+        # ask user for input specific data
+        user_input = ui.get_inputs([key], '')[0]
+
+        # ask user for input specific data until data meet requirements
         while not data_structure[key](user_input):
             user_input = ui.get_inputs([key], 'Wrong input')[0]
-        if user_input.isdigit():
-            user_input = int(user_input)
+
         record.append(user_input)
     return record
 
@@ -63,9 +82,34 @@ def start_module():
         None
     """
 
+    title = 'Accounting menu'
+    options = ['add', 'remove', 'update', 'show table']
+    functions = [add, remove, update, show_table]
+    user_input = ''
 
+    while user_input != '0':
+        # read data
+        table = data_manager.get_table_from_file('accounting/items.csv')
 
-    pass
+        # UI
+        ui.print_menu(title, options, 'exit')
+        user_input = ui.get_inputs(['Choose option'], '')[0]
+
+        # bulletproof
+        if user_input.isdigit() and int(user_input) <= len(options) and user_input != '0':
+            user_input = int(user_input)
+
+            # ask for id in remove and update functions
+            if(user_input == 2 or user_input == 3):
+                id_ = ui.get_inputs(['id'], '')[0]
+                functions[user_input-1](table, id_)
+
+            # don't ask for id in remove and update functions
+            else:
+                functions[user_input-1](table)
+
+        # writing data
+        data_manager.write_table_to_file('accounting/items.csv', table)
 
 
 def show_table(table):
@@ -79,9 +123,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    header = ['id', 'month', 'day', 'year', 'type', 'amount']
+    ui.print_table(table, header)
 
 
 def add(table):
@@ -99,7 +142,7 @@ def add(table):
     record = [common.generate_random(table)]
 
     # data structure
-    ds = data_structure()
+    ds = get_data_structure()
     # append record by data from user
     record += ask_user_for_data(ds)
 
@@ -123,7 +166,7 @@ def remove(table, id_):
 
     index_to_delete = find_index_by_id(table, id_)
 
-    if index_to_delete == None:
+    if index_to_delete is None:
         ui.print_error_message('no item of this id')
     else:
         table.pop(index_to_delete)
@@ -142,21 +185,22 @@ def update(table, id_):
     Returns:
         table with updated record
     """
+    # check is id_ exists in table
+    if not find_index_by_id(table, id_):
+        ui.print_error_message('no such id')
+        return table
 
     # keep previous id
     record = [id_]
 
     # data structure
-    ds = data_structure()
-    # apend record by data from user
+    ds = get_data_structure()
+    # append record by data from user
     record += ask_user_for_data(ds)
-
-    # 
 
     # change data
     table = remove(table, id_)
     table.append(record)
-
 
     return table
 
