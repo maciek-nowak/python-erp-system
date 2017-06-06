@@ -17,6 +17,20 @@ import data_manager
 # common module
 import common
 
+def data_structure():
+    '''
+
+    '''
+    ds = {
+          'month (1-12)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 12,
+          'day (1-31)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 31,
+          'year (1900-9999)': lambda x: x.isdigit() and int(x) >= 1900 and int(x) <= 9999,
+          'type (\'in\' or \'out\')': lambda x: x == 'in' or x == 'out',
+          'ammount (dollar)': lambda x: x.isdigit()
+         }
+
+    return ds
+
 def ask_user_for_data(data_structure):
     record = []
     for key in data_structure:
@@ -85,14 +99,7 @@ def add(table):
     record = [common.generate_random(table)]
 
     # data structure
-    ds = {
-          'month (1-12)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 12,
-          'day (1-30)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 30,
-          'year (1900-9999)': lambda x: x.isdigit() and int(x) >= 1900 and int(x) <= 9999,
-          'type (\'in\' or \'out\')': lambda x: x == 'in' or x == 'out',
-          'ammount (dollar)': lambda x: x.isdigit()
-          }
-
+    ds = data_structure()
     # append record by data from user
     record += ask_user_for_data(ds)
 
@@ -136,7 +143,21 @@ def update(table, id_):
         table with updated record
     """
 
-    
+    # keep previous id
+    record = [id_]
+
+    # data structure
+    ds = data_structure()
+    # apend record by data from user
+    record += ask_user_for_data(ds)
+
+    # 
+
+    # change data
+    table = remove(table, id_)
+    table.append(record)
+
+
     return table
 
 
