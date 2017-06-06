@@ -28,8 +28,6 @@ def start_module():
         None
     """
 
-    # you code
-
     pass
 
 
@@ -60,7 +58,23 @@ def add(table):
         Table with a new record
     """
 
-    # your code
+    # generate random id
+    record = [common.generate_random(table)]
+
+    # data structure
+    ds = {
+          'month (1-12)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 12,
+          'day (1-30)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 30,
+          'year (1900-9999)': lambda x: x.isdigit() and int(x) >= 1900 and int(x) <= 9999,
+          'type (\'in\' or \'out\')': lambda x: x == 'in' or x == 'out',
+          'ammount (dollar)': lambda x: x.isdigit()
+          }
+
+    # append record by data from user
+    record.append(ask_user_for_data(ds))
+
+    # append table by record
+    table.append(record)
 
     return table
 
