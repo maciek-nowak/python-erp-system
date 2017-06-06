@@ -28,6 +28,8 @@ def start_module():
         None
     """
 
+
+
     pass
 
 
@@ -71,7 +73,7 @@ def add(table):
           }
 
     # append record by data from user
-    record.append(ask_user_for_data(ds))
+    record.append(common.ask_user_for_data(ds))
 
     # append table by record
     table.append(record)
