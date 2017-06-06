@@ -29,6 +29,7 @@ def generate_random(table):
 
 
 def import_from_csv(filename):
+    '''Filename is an address to a file with filename eg: sales/sales.csv. Func returns lists with items from csv file '''
     imported_things = []
     with open(filename, 'r') as string:
         reader = csv.reader(string, delimiter=';')
