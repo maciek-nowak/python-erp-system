@@ -1,7 +1,7 @@
 # implement commonly used functions here
 
 import random
-
+import csv
 
 # generate and return a unique and random string
 # other expectation:
@@ -26,3 +26,13 @@ def generate_random(table):
     # your code
 
     return generated
+
+
+def import_from_csv(filename):
+    imported_things = []
+    with open(filename, 'r') as string:
+        reader = csv.reader(string, delimiter=';')
+        for row in reader:
+            imported_things.append(row)
+
+    return imported_things
