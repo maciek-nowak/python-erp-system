@@ -60,7 +60,7 @@ def add(table):
 
     # your code
 
-    return table
+    pass
 
 
 def remove(table, id_):
@@ -77,7 +77,7 @@ def remove(table, id_):
 
     # your code
 
-    return table
+    pass
 
 
 def update(table, id_):
@@ -94,7 +94,7 @@ def update(table, id_):
 
     # your code
 
-    return table
+    pass
 
 
 # special functions:

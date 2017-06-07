@@ -36,6 +36,7 @@ def generate_random(table):
                 checkout = False
         return generated
 
+
 def find_index_by_id(table, id_):
     """
     Returns:
@@ -47,3 +48,16 @@ def find_index_by_id(table, id_):
         if table[i][0] == id_:
             return i
 
+
+def is_selection_proper(task_selection, max_possible_choice):
+    '''
+    checks if input is valid
+    Args:
+        task_selection: list (len(list)=1)
+    Returns:
+        task_selection: list (len(list)=1) cappable to navigate tghrough the program
+    '''
+    if int(task_selection[0]) not in range(max_possible_choice + 1):
+        return False
+    else:
+        return True
