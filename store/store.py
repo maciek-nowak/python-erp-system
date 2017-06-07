@@ -73,10 +73,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
-
+    header = ['id', 'title', 'manufacturer', 'price', 'in stock']
+    ui.print_table(table, header)
 
 def add(table):
     """
