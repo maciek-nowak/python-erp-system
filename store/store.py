@@ -16,6 +16,37 @@ import data_manager
 import common
 
 
+def get_data_structure():
+    """
+    """
+    ds = {
+          'title': lambda x: True,
+          'manufacturer': lambda x: True,
+          'price (dollars)': lambda x: x.isdigit(),
+          'in stock (amount)': lambda x: x.isdigit()
+        }
+
+    return ds
+
+
+def ask_user_for_data(data_structure):
+    """
+
+    """
+
+    record = []
+    for key in data_structure:
+        # ask user for input specific data
+        user_input = ui.get_inputs([key], '')[0]
+
+        # ask user for input specific data until data meet requirements
+        while not data_structure[key](user_input):
+            user_input = ui.get_inputs([key], 'Wrong input')[0]
+
+        record.append(user_input)
+    return record
+
+
 def start_module():
     """
     Starts this module and displays its menu.
@@ -58,7 +89,16 @@ def add(table):
         Table with a new record
     """
 
-    # your code
+    # generate random id
+    record = [common.generate_random(table)]
+
+    # data structure
+    ds = get_data_structure()
+    # append record by data from user
+    record += ask_user_for_data(ds)
+
+    # append table by record
+    table.append(record)
 
     return table
 
