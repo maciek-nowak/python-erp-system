@@ -16,6 +16,46 @@ import data_manager
 import common
 
 
+def choose_and_start_option(table):
+    go_back_to_main = False
+
+    inputs = ui.get_inputs(["Please enter a number: "], "")
+    option = inputs[0]
+    if option == "1":
+        show_table(table)
+    elif option == "2":
+        table = add(table)
+    elif option == "3":
+        show_table(table)
+        id_ = ui.get_inputs(["User id"], "Please choose customer to remove")[0]
+        table = remove(table, id_)
+    elif option == "4":
+        show_table(table)
+        id_ = ui.get_inputs(["User id:"], "Please choose customer to update")[0]
+        table = update(table, id_)
+    elif option == "5":
+        ui.print_result(get_longest_name_id(table), 'Id of customer with longest name')
+    elif option == "6":
+        ui.print_result(get_subscribed_emails(table), 'Customers subscribed to newsletter')
+    elif option == "0":
+        go_back_to_main = True
+    else:
+        ui.print_error_message("There is no such option.")
+
+    return table, go_back_to_main
+
+
+def handle_menu():
+    options = ["List customer data",
+               "Add new customer",
+               "Remove customer",
+               "Update customer data",
+               "Find customer with longest name",
+               "Print customers subscribed to newsletter"]
+
+    ui.print_menu("Customer Relationship Management (CRM)", options, "Return to Main menu")
+
+
 def start_module():
     """
     Starts this module and displays its menu.
@@ -26,9 +66,12 @@ def start_module():
         None
     """
 
-    # your code
+    table = data_manager.get_table_from_file('crm/customers.csv')
 
-    pass
+    go_back_to_main = False
+    while not go_back_to_main:
+        handle_menu()
+        table, go_back_to_main = choose_and_start_option(table)
 
 
 def show_table(table):
@@ -42,9 +85,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ['id', 'name', 'e-mail', 'subscribed']
+    ui.print_table(table, title_list)
 
 
 def add(table):
@@ -75,8 +117,10 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
-
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            table.pop(i)
+            data_manager.write_table_to_file('crm/customers.csv', table)
     return table
 
 
@@ -92,8 +136,12 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
-
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            table = add(table)
+            table[-1][0] = id_
+            table.insert(i, table.pop())
+            data_manager.write_table_to_file('crm/customers.csv', table)
     return table
 
 
