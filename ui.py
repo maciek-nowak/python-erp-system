@@ -216,7 +216,7 @@ def get_inputs(list_labels, title):
     print(title)
 
     for question in list_labels:
-        answer = input(question + ': ')
+        answer = input(question + ' ')
         inputs.append(answer)
 
     return inputs
