@@ -57,10 +57,34 @@ def start_module():
         None
     """
 
-    # your code
+    title = 'Store menu'
+    options = ['add', 'remove', 'update', 'show table']
+    functions = [add, remove, update, show_table]
+    user_input = ''
 
-    pass
+    while user_input != '0':
+        # read data
+        table = data_manager.get_table_from_file('store/games.csv')
 
+        # UI
+        ui.print_menu(title, options, 'exit')
+        user_input = ui.get_inputs(['Choose option'], '')[0]
+
+        # bulletproof
+        if user_input.isdigit() and int(user_input) <= len(options) and user_input != '0':
+            user_input = int(user_input)
+
+            # ask for id in remove and update functions
+            if(user_input == 2 or user_input == 3):
+                id_ = ui.get_inputs(['id'], '')[0]
+                functions[user_input-1](table, id_)
+            
+            # don't ask for id in remove and update functions
+            else:
+                functions[user_input-1](table)
+
+        # writing data
+        data_manager.write_table_to_file('store/games.csv', table)
 
 def show_table(table):
     """
@@ -75,6 +99,7 @@ def show_table(table):
 
     header = ['id', 'title', 'manufacturer', 'price', 'in stock']
     ui.print_table(table, header)
+
 
 def add(table):
     """
