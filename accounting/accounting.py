@@ -186,7 +186,7 @@ def update(table, id_):
         table with updated record
     """
     # check is id_ exists in table
-    if not find_index_by_id(table, id_):
+    if find_index_by_id(table, id_) is None:
         ui.print_error_message('no such id')
         return table
 
