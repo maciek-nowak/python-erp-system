@@ -115,7 +115,12 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    index_to_delete = common.find_index_by_id(table, id_)
+
+    if index_to_delete is None:
+        ui.print_error_message('no item of this id')
+    else:
+        table.pop(index_to_delete)
 
     return table
 
