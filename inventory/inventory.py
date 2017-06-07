@@ -27,9 +27,77 @@ def start_module():
         None
     """
 
-    # you code
+    menu_list = ['Show table', 'Add game to inventory',
+                 'Remove game from inventory', 'Update data for game']
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
+    error_message = 'Select number from 0 to 4, pointing the action you want to be done'
+    title = 'Inventory'
+    table = data_manager.get_table_from_file(file_name)
 
-    pass
+    stay = True
+    while stay:
+        ui.print_menu(title, menu_list, 'Back to main menu')
+
+        task_selection = ui.get_inputs([''], 'Please enter a number')
+
+        while not common.is_selection_proper(task_selection, len(menu_list)):
+            task_selection = ui.get_inputs([''], 'Please enter a number')
+            ui.print_error_message(error_message)
+
+        if task_selection[0] == '1':
+
+            show_table(table)
+
+        elif task_selection[0] == '2':
+
+            table = add(table)
+
+        elif task_selection[0] == '3':
+
+            id_ = ask_for_id(table, 'Please enter an id of person to remove')
+            table = remove(table, id_)
+
+        elif task_selection[0] == '4':
+            id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
+            update(table, id_)
+
+        else:
+            stay = False
+
+
+def ask_for_id(table, what_for):
+    '''
+    asks for for id, checks if it exists in table
+
+    Args:
+        table: list of lists
+        what_for: (str) exmpl; 'Please enter an id of person to remove'
+
+    Returns:
+        id_: str
+    '''
+
+    id_ = ui.get_inputs([''], what_for)[0]
+    while not is_id_on_table(table, id_):
+        id_ = ui.get_inputs([], what_for)[0]
+
+    return id_
+
+
+def is_id_on_table(table, id_):
+    '''
+    function chcecks if table contain record of given id
+    
+    Args:
+        table: list of lists
+
+    Returns:
+        Boolean
+    '''
+    for i in range(len(table)):
+        if table[i][0] == id_:     # IS IT PROPER?
+            return True
+    return False
 
 
 def show_table(table):
@@ -43,9 +111,8 @@ def show_table(table):
         None
     """
 
-    # your code
-
-    pass
+    title_list = ['id', 'name of game', 'company', 'amount']
+    ui.print_table(table, title_list)
 
 
 def add(table):
