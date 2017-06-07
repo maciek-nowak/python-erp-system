@@ -39,3 +39,15 @@ def generate_random(table):
             else:
                 checkout = False
         return generated
+
+def find_index_by_id(table, id_):
+    """
+    Returns:
+        int: index of table contains id_
+        None: if id_ don't exist
+    """
+
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            return i
+
