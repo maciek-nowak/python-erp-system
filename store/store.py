@@ -137,7 +137,23 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
+    # check is id_ exists in table
+    if common.find_index_by_id(table, id_) is None:
+        ui.print_error_message('no such id')
+        return table
+
+    # keep previous id
+    record = [id_]
+
+    # data structure
+    ds = get_data_structure()
+
+    # append record by data from user
+    record += ask_user_for_data(ds)
+
+    # change data
+    table = remove(table, id_)
+    table.append(record)
 
     return table
 
