@@ -62,16 +62,6 @@ def ask_user_for_data(data_structure):
     return record
 
 
-def find_index_by_id(table, id_):
-    """
-    Returns index of table contains id_ or returns None if id_ don't exist
-    """
-
-    for i in range(len(table)):
-        if table[i][0] == id_:
-            return i
-
-
 def start_module():
     """
     Starts this module and displays its menu.
@@ -164,7 +154,7 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    index_to_delete = find_index_by_id(table, id_)
+    index_to_delete = common.find_index_by_id(table, id_)
 
     if index_to_delete is None:
         ui.print_error_message('no item of this id')
@@ -186,7 +176,7 @@ def update(table, id_):
         table with updated record
     """
     # check is id_ exists in table
-    if not find_index_by_id(table, id_):
+    if not common.find_index_by_id(table, id_):
         ui.print_error_message('no such id')
         return table
 
