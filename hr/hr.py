@@ -24,7 +24,7 @@ def start_module():
     Returns:
         None
     """
-    
+
     menu_list = ['Show table of employees', 'Add employee to register',
                  'Remove employee from register', 'Update data of employee']
     file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
@@ -41,19 +41,19 @@ def start_module():
         while not common.is_selection_proper(task_selection, len(menu_list)):
             task_selection = ui.get_inputs(['Please enter a number'], '')
             print_error_message(error_message)
-        
+
         if task_selection[0] == '1':
             show_table(table)
-        
+
         elif task_selection[0] == '2':
-            add(table)
-        
+            table = add(table)
+
         '''elif task_selection[0] == '3':
             remove(table, id_)
 
         elif task_selection[0] == 4:
             update(table, id_)
-        
+
         else:
             stay = False'''
 
@@ -68,7 +68,7 @@ def show_table(table):
     Returns:
         None
     """
-    
+
     title_list = ['id', 'name', 'year of birth']
     ui.print_table(table, title_list)
 
@@ -83,6 +83,11 @@ def add(table):
     Returns:
         Table with a new record
     """
+    attribute_list = ['id', 'name', 'year of birth']
+    a_person = [common.generate_random(table)]
+
+    a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')
+    table.append(a_person)
 
     return table
 
