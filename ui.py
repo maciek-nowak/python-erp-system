@@ -149,7 +149,7 @@ def print_result(result, label):
         This function doesn't return anything it only prints to console.
     """
 
-    print(label)
+    print('\n', label)
 
     if type(result) is str:
         print(result)
@@ -181,7 +181,7 @@ def print_menu(title, list_options, exit_message):
         This function doesn't return anything it only prints to console.
     """
 
-    print(title)
+    print('\n', title)
 
     option_id = 1
     for option in list_options:
@@ -213,7 +213,7 @@ def get_inputs(list_labels, title):
 
     inputs = []
 
-    print(title)
+    print('\n', title)
 
     for question in list_labels:
         answer = input(question + ' ')
@@ -236,4 +236,4 @@ def print_error_message(message):
         This function doesn't return anything it only prints to console.
     """
 
-    print('Error:', message)
+    print('\nError:', message)
