@@ -149,9 +149,15 @@ def print_result(result, label):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
+    print(label)
 
-    pass
+    if type(result) is str:
+        print(result)
+    elif type(result) is list:
+        print('\n'.join(result))
+    elif type(result) is dict:
+        for key in result:
+            print(key + ':', result[key])
 
 
 def print_menu(title, list_options, exit_message):
@@ -210,7 +216,7 @@ def get_inputs(list_labels, title):
     print(title)
 
     for question in list_labels:
-        answer = input(question + ': ')
+        answer = input(question + ' ')
         inputs.append(answer)
 
     return inputs
