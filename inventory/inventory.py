@@ -28,9 +28,10 @@ def start_module():
     """
 
     menu_list = ['Show table', 'Add game to inventory',
-                 'Remove game from inventory', 'Update data for game']
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
-    error_message = 'Select number from 0 to 4, pointing the action you want to be done'
+                 'Remove game from inventory', 'Update data for game',
+                 'Available items', 'Average durability by manufacturers']
+    file_name = 'inventory/inventory.csv'
+    error_message = 'Select number from 0 to 6, pointing the action you want to be done'
     title = 'Inventory'
     table = data_manager.get_table_from_file(file_name)
 
@@ -60,6 +61,12 @@ def start_module():
         elif task_selection[0] == '4':
             id_ = ask_for_id(table, 'Please enter an id of game to be updated')
             update(table, id_)
+
+        elif task_selection[0] == '5':
+            ui.print_table(get_available_items(table), 'Available items')
+
+        elif task_selection[0] == '6':
+            ui.print_result(get_average_durability_by_manufacturers(table), 'average durability by manufacturers ')
 
         else:
             stay = False
@@ -111,7 +118,7 @@ def show_table(table):
         None
     """
 
-    title_list = ['id', 'name of game', 'company', 'year of realise', 'amount']
+    title_list = ['id', 'name of game', 'company', 'year of realise', 'durability']
     ui.print_table(table, title_list)
 
 
@@ -126,10 +133,10 @@ def add(table):
         Table with a new record
     """
 
-    attribute_list = ['id', 'name of game', 'company', 'year of realise', 'amount']
+    attribute_list = ['id', 'name of game', 'company', 'year of realise', 'durability']
     an_item = [common.generate_random(table)]
 
-    an_item += ui.get_inputs(['name of game', 'company', 'year of realise', 'amount'], 'Please, provide a game information')
+    an_item += ui.get_inputs(['name of game', 'company', 'year of realise', 'durability'], 'Please, provide a game information')
     table.append(an_item)
 
     file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
@@ -179,7 +186,7 @@ def update(table, id_):
             removal_index = i
             break
 
-    list_of_options = ['name of game', 'company', 'year of realise', 'amount']
+    list_of_options = ['name of game', 'company', 'year of realise', 'durability']
 
     option_selection = ui.get_inputs(list_of_options, "Do you want to update (y/n) : ")
     for i in range(len(option_selection)):
@@ -205,10 +212,9 @@ def update(table, id_):
 #
 # @table: list of lists
 def get_available_items(table):
-
-    # your code
-
-    pass
+    current_year = 2017
+    durable = [item for i, item in enumerate(table) if current_year - int(table[i][3]) <= int(table[i][4])]
+    return durable
 
 
 # the question: What are the average durability times for each manufacturer?
@@ -217,6 +223,20 @@ def get_available_items(table):
 # @table: list of lists
 def get_average_durability_by_manufacturers(table):
 
-    # your code
+    manufacturers = []
+    manufacturers_avg_durability = {}
 
-    pass
+    for i in range(len(table)):
+        if table[i][2] not in manufacturers:
+            manufacturers.append(table[i][2])
+
+    for man in manufacturers:
+        sum = 0
+        amount_of_stuff = 0
+        for i in range(len(table)):
+            if table[i][2] == man:
+                sum += table[i][4]
+                amount_of_stuff += 1
+        manufacturers_avg_durability[man] = sum/amount_of_stuff
+
+    return manufacturers_avg_durability
