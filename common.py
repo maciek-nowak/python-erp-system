@@ -12,8 +12,10 @@ import random
 def generate_random(table):
     """
     Generates random and unique string. Used for id/key generation.
+
     Args:
-    table: list containing keys. Generated string should be different then all of them
+        table: list containing keys. Generated string should be different then all of them
+
     Returns:
         Random and unique string
     """
@@ -41,7 +43,7 @@ def find_index_by_id(table, id_):
     """
     Returns:
         int: index of table contains id_
-        None: if id_ don't exist
+        None: if id_ doesn't exist
     """
 
     for i in range(len(table)):
@@ -50,19 +52,21 @@ def find_index_by_id(table, id_):
 
 
 def is_selection_proper(task_selection, max_possible_choice):
-    """ 
+    """
     checks if input is valid
+
     Args:
         task_selection: list (len(list)=1)
+
     Returns:
-        task_selection: list (len(list)=1) cappable to navigate tghrough the program
-    """ 
+        task_selection: list (len(list)=1) cappable to navigate through the program
+    """
 
     try:
         if int(task_selection[0]) not in range(max_possible_choice + 1):
             return False
         else:
             return True
-            
+
     except ValueError:
         return False
