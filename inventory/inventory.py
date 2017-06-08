@@ -94,7 +94,7 @@ def ask_for_id(table, what_for):
 def is_id_on_table(table, id_):
     '''
     function chcecks if table contain record of given id
-    
+
     Args:
         table: list of lists
 
@@ -214,6 +214,11 @@ def update(table, id_):
 def get_available_items(table):
     current_year = 2017
     durable = [item for i, item in enumerate(table) if current_year - int(table[i][3]) <= int(table[i][4])]
+
+    for i in range(len(durable)):
+        durable[i][-1] = int(durable[i][-1])
+        durable[i][-2] = int(durable[i][-2])
+
     return durable
 
 

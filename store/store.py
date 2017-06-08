@@ -47,7 +47,10 @@ def ask_user_for_data(data_structure):
     """
 
     record = []
-    for key in data_structure:
+
+    order = ['title', 'manufacturer', 'price (dollars)', 'in stock (amount)']
+
+    for key in order:
         # ask user for input specific data
         user_input = ui.get_inputs([key], '')[0]
 
@@ -165,7 +168,7 @@ def add(table):
     # append table by record
     table.append(record)
 
-    pass
+    return table
 
 
 def remove(table, id_):

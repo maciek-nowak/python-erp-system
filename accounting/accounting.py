@@ -102,7 +102,7 @@ def get_data_structure():
           'day (1-31)': is_day,
           'year (1900-9999)': is_year,
           'type (\'in\' or \'out\')': is_type,
-          'amount (dollar)': is_ammount 
+          'amount (dollar)': is_ammount
           }
 
     return data_structure
@@ -145,33 +145,33 @@ def choose_option(option, table):
     Returns:
         table: list of lists
     """
-    
+
     if option == '1':
+        show_table(table)
+
+    elif option == '2':
         ui.print_result('Please enter data for', 'Adding new data')
         return add(table)
 
-    elif option == '2':
+    elif option == '3':
         id_ = ui.get_inputs(['id: '], 'Which record you want to delete?')[0]
         return remove(table, id_)
 
-    elif option == '3':
+    elif option == '4':
         id_ = ui.get_inputs(['id: '], 'Which record you want to update?')[0]
         return update(table, id_)
 
-    elif option == '4':
-        show_table(table)
-
     elif option == '5':
-        result =  which_year_max(table)
+        result = which_year_max(table)
         ui.print_result(str(result), 'Year of maximum profit')
 
     elif option == '6':
-        year = ui.get_inputs(['year'], 'Compute average profit for')[0]
+        year = ui.get_inputs(['year:'], 'Compute average profit for')[0]
         result = avg_amount(table, year)
         ui.print_result(str(result), 'Average profit for year ' + year + ': ')
 
     else:
-        ui.print_error_message('Ther is no such option')
+        ui.print_error_message('There is no such option')
 
     return table
 
@@ -187,7 +187,7 @@ def start_module():
     """
 
     title = 'Accounting menu'
-    options = ['Add', 'Remove', 'Update', 'Show table', 'Year of maximum profit', 'Compute average profit']
+    options = ['Show table', 'Add', 'Remove', 'Update', 'Year of maximum profit', 'Compute average profit']
     user_input = ''
     file_path = 'accounting/items.csv'
 
@@ -199,7 +199,7 @@ def start_module():
             table = []
 
         ui.print_menu(title, options, 'Return to main menu')
-        user_input = ui.get_inputs(['Choose option'], '')[0]
+        user_input = ui.get_inputs(['Choose option:'], '')[0]
 
         table = choose_option(user_input, table)
 
@@ -327,7 +327,7 @@ def which_year_max(table):
 
     Args:
         table: list of lists
-    
+
     Returns:
         int: maximum year
     """
@@ -350,7 +350,7 @@ def avg_amount(table, year):
 
     Args:
         table: list of lists
-        year: string 
+        year: string
 
     Returns:
         float: average profit

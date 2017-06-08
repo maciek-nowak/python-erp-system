@@ -9,7 +9,6 @@
 # month,year and day combined gives the date the sale was made
 
 
-
 # importing everything you need
 import os
 # User interface module
@@ -43,21 +42,24 @@ def start_module():
             inputs = ui.get_inputs(["Please enter a number: "], "")
             option = inputs[0]
             if option == "1":
-                #ui.print_table(table,['ID','Name','price','month','day','year'])
                 show_table(table)
             elif option == "2":
                 add(table)
             elif option == "3":
-                id_ = ui.get_inputs(['give me id'],'Update by id')
-                update(table,id_[0])
+                id_ = ui.get_inputs(['give me id'], 'Update by id')
+                update(table, id_[0])
             elif option == "4":
-                ui.print_result(get_lowest_price_item_id(table),'Lowest price item: ')
+                ui.print_result(get_lowest_price_item_id(table), 'Lowest price item: ')
             elif option == "5":
-                #get_items_sold_between()
-                pass
+                between_solds_inputs = ui.get_inputs(
+                    ['Month from', 'Day from', 'Year from', 'Month to', 'Day to', 'Year to'], 'Give me this data')
+                cycki = get_items_sold_between(table, between_solds_inputs[0], between_solds_inputs[1],
+                                               between_solds_inputs[2], between_solds_inputs[3],
+                                               between_solds_inputs[4], between_solds_inputs[5])
+                show_table(cycki)
             elif option == "6":
-                id_ = ui.get_inputs(['give me id'],'remove by id')
-                remove(table,id_)
+                id_ = ui.get_inputs(['give me id'], 'remove by id')
+                remove(table, id_)
             elif option == "0":
                 break
             else:
@@ -80,7 +82,6 @@ def show_table(table):
     ui.print_table(table, title_list)
 
 
-
 def add(table):
     """
     Asks user for input and adds it into the table.
@@ -91,8 +92,8 @@ def add(table):
     Returns:
         Table with a new record
     """
-    inputs = ['ID','name','price','month','day','year']
-    item_to_add = ui.get_inputs(inputs,'Items to add, please enter ur data')
+    inputs = ['name', 'price', 'month', 'day', 'year']
+    item_to_add = ui.get_inputs(inputs, 'Items to add, please enter ur data')
     try:
         if int(item_to_add[2]) > 13 and int(item_to_add[2]) < 1:
             msg = 'wrong month structure: '
@@ -112,11 +113,9 @@ def add(table):
     except ValueError as err:
         ui.print_error_message(err)
 
-
+    item_to_add.insert(0, common.generate_random(table))
     table.append(item_to_add)
     data_manager.write_table_to_file('sales/sales.csv', table)
-
-
 
     return table
 
@@ -136,12 +135,11 @@ def remove(table, id_):
     delete = False
     index = 0
     id_ = str(id_[0])
-    print(id_)
     try:
         while table and index != len(table):
             if table[index][0] == id_:
                 del table[index]
-                data_manager.write_table_to_file('sales/sales.csv', table)# FILENAME EVERYONE GOT THEIR OWN FILENAME!
+                data_manager.write_table_to_file('sales/sales.csv', table)  # FILENAME EVERYONE GOT THEIR OWN FILENAME!
                 return table
             index += 1
     except:
@@ -167,12 +165,11 @@ def update(table, id_):
         table with updated record
     """
     update_items = []
-    #szukamy id
+    # szukamy id
     for lists in table:
         if lists[0] == id_:
-            inputs = ['ID','name','price','month','day','year']
-            item_to_add = ui.get_inputs(inputs,'Item to update, please enter ur data')
-            print(item_to_add)
+            inputs = ['ID', 'name', 'price', 'month', 'day', 'year']
+            item_to_add = ui.get_inputs(inputs, 'Item to update, please enter ur data')
             try:
                 if int(item_to_add[3]) > 13 or int(item_to_add[3]) < 1:
                     msg = 'wrong month structure: '
@@ -193,13 +190,10 @@ def update(table, id_):
                 ui.print_error_message(err)
                 return 0
 
-            remove(table,id_)
+            remove(table, id_)
             table.append(item_to_add)
 
             data_manager.write_table_to_file('sales/sales.csv', table)
-
-
-    #data_manager.write_table_to_file('sales/sales.csv', table):
 
     return table
 
@@ -211,7 +205,16 @@ def update(table, id_):
 # return type: string (id)
 # if there are more than one with the lowest price, return the first by descending alphabetical order
 def get_lowest_price_item_id(table):
+    """
+    Returning id with lowest price
 
+        Args:
+            table: list in which record we should look for lowest price
+            table (list): table to look for lowest price
+
+        Returns:
+            Id of item with lowest price
+    """
     min = table[0][2]
     id_lower_price = 0
     for index in range(len(table)-1):
@@ -225,7 +228,28 @@ def get_lowest_price_item_id(table):
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
 # return type: list of lists (the filtered table)
 def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
+    """
+        Filtering table with date that is between input dates
 
-    # your code
+        Args:
+            table: list in which record should program look for records
+            month_from: month date we would like to start looking for
+            day_from: day date we would like to start looking for
+            year_from: year date we would like to start looking for
+            month_to: month date that we would like to stop looking for
+            day_to: day date that we would like to stop looking for
+            year_to: year date that we would like to stop looking for
 
-    pass
+        Returns:
+            list of lists thats are filtered from/to dates
+    """
+
+    items_sold_between = []
+    index = 0
+    start_date = str(year_from) + str(month_from) + str(day_from)
+    end_date = str(year_to) + str(month_to) + str(day_to)
+    for record in table:
+        if end_date > record[-1] > start_date:
+            items_sold_between.append(record)
+
+    return items_sold_between
