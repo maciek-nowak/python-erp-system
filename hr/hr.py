@@ -209,6 +209,15 @@ def update(table, id_):
 # the question: Who is the oldest person ?
 # return type: list of strings (name or names if there are two more with the same value)
 def get_oldest_person(table):
+    """
+    Returns list of oldest persons.
+
+    Args:
+        table: list of lists.
+
+    Returns:
+        old_people: list of strings with names of oldest employees
+    """
 
     current_year = 2017   # OMG GDZIE JEST CZAS
     min_birth_year = current_year
@@ -228,13 +237,13 @@ def get_oldest_person(table):
 # the question: Who is the closest to the average age ?
 # return type: list of strings (name or names if there are two more with the same value)
 def calculate_add(values):
-    """Function calculates summary width of all table columns.
+    """Function adds collection.
 
     Args:
-        table_columns_width (list of int): list of table column width
+        values (list of int): list of numbers
 
     Return:
-        total_width (int): summary width of all table columns
+        total (int): added collection
     """
     total = 0
 
@@ -247,6 +256,16 @@ def calculate_add(values):
 # the question: Who is the closest to the average age ?
 # return type: list of strings (name or names if there are two more with the same value)
 def get_persons_closest_to_average(table):
+    """
+    Returns list of employees which age is closest to avg age.
+
+    Args:
+        table: list of lists.
+
+    Returns:
+        names: list of strings with names of employees which age is closest to avg age
+    """
+
     current_year = 2017
     ages = [current_year - int(record[2]) for record in table]
     sum_ages = calculate_add(ages)
