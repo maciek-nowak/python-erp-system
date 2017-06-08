@@ -8,6 +8,7 @@ import random
 # @table: list of lists
 # @generated: string - randomly generated string (unique in the @table)
 
+
 def generate_random(table):
     """
     Generates random and unique string. Used for id/key generation.
@@ -18,27 +19,23 @@ def generate_random(table):
     """
     generated = ''
 
-    #letters = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o,','p','q','r','s','t','u','v','w','x','y','z']
-    #losujemy i dodajemy
-    #wielkie od 65 do 90 włacznie
-    #male od 97 do 122 włacznie
-    #znaki 33 do 47 włacznie
     checkout = True
     while checkout:
-        generated += chr(random.randrange(97,123))
-        generated += chr(random.randrange(65,91))
-        generated += str(random.randrange(0,10))
-        generated += str(random.randrange(0,10))
-        generated += chr(random.randrange(65,91))
-        generated += chr(random.randrange(97,123))
+        generated += chr(random.randrange(97, 123))
+        generated += chr(random.randrange(65, 91))
+        generated += str(random.randrange(0, 10))
+        generated += str(random.randrange(0, 10))
+        generated += chr(random.randrange(65, 91))
+        generated += chr(random.randrange(97, 123))
         for i in range(2):
-            generated += chr(random.randrange(33,48))
+            generated += chr(random.randrange(33, 48))
         for index in range(len(table)):
             if generated == table[index][0]:
                 checkout = True
             else:
                 checkout = False
         return generated
+
 
 def find_index_by_id(table, id_):
     """
@@ -51,3 +48,20 @@ def find_index_by_id(table, id_):
         if table[i][0] == id_:
             return i
 
+
+def is_selection_proper(task_selection, max_possible_choice):
+    '''
+    checks if input is valid
+    Args:
+        task_selection: list (len(list)=1)
+    Returns:
+        task_selection: list (len(list)=1) cappable to navigate tghrough the program
+    '''
+    try:
+        if int(task_selection[0]) not in range(max_possible_choice + 1):
+            return False
+        else:
+            return True
+            
+    except ValueError:
+        return False

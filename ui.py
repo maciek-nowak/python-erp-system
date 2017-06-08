@@ -130,12 +130,6 @@ def print_table(table, title_list):
         This function doesn't return anything it only prints to console.
     """
 
-    """title_list = ['id', 'name', 'price', 'amount', 'reserved', 'year']
-    table = [["eH34Ju#&", "Astebreed", 25, 3, 10, 2016],
-             ["bH34Ju#&", "Age of Wonders II: The Wizard's Throne", 20, 4, 1, 2016],
-             ["vH34Ju#&", "AudioSurf", 23, 6, 2, 2016],
-             ["kH35Ju#&", "Age of Empires", 11, 3, 7, 2016]]"""
-
     table_columns_width = calculate_column_width(table, title_list)
     table_to_print = create_column_titles(title_list, table_columns_width)
     table_to_print = create_data_rows(table, table_columns_width, table_to_print)
@@ -155,9 +149,15 @@ def print_result(result, label):
         This function doesn't return anything it only prints to console.
     """
 
-    # your code
+    print('\n', label)
 
-    pass
+    if type(result) is str:
+        print(result)
+    elif type(result) is list:
+        print('\n'.join(result))
+    elif type(result) is dict:
+        for key in result:
+            print(key + ':', result[key])
 
 
 def print_menu(title, list_options, exit_message):
@@ -181,7 +181,7 @@ def print_menu(title, list_options, exit_message):
         This function doesn't return anything it only prints to console.
     """
 
-    print(title)
+    print('\n', title)
 
     option_id = 1
     for option in list_options:
@@ -213,10 +213,10 @@ def get_inputs(list_labels, title):
 
     inputs = []
 
-    print(title)
+    print('\n', title)
 
     for question in list_labels:
-        answer = input(question + ': ')
+        answer = input(question + ' ')
         inputs.append(answer)
 
     return inputs
@@ -236,4 +236,4 @@ def print_error_message(message):
         This function doesn't return anything it only prints to console.
     """
 
-    print('Error:', message)
+    print('\nError:', message)
