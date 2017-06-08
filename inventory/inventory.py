@@ -111,7 +111,7 @@ def show_table(table):
         None
     """
 
-    title_list = ['id', 'name of game', 'company', 'amount']
+    title_list = ['id', 'name of game', 'company', 'year of realise', 'amount']
     ui.print_table(table, title_list)
 
 
