@@ -259,9 +259,11 @@ def get_average_by_manufacturer(table, manufacturer):
     ammount_by_manufacturer = 0
     for record in table:
         if record[2] == manufacturer:
-           ammount_by_manufacturer += int(record[4])
+            ammount_by_manufacturer += int(record[4])
 
-    try:
-        return ammount_by_manufacturer/get_counts_by_manufacturers(table)[manufacturer]
-    except NameError:
+    counts = get_counts_by_manufacturers(table)
+    if manufacturer not in counts:
         ui.print_error_message('There is no such manufacturer')
+        return 0.0
+    else:
+        return ammount_by_manufacturer/counts[manufacturer]

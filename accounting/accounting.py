@@ -45,6 +45,7 @@ def is_day(user_input):
 
     return user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 31
 
+
 def is_year(user_input):
     """
     Check correctnes of user input for day value
@@ -88,14 +89,14 @@ def is_ammount(user_input):
 
 
 def get_data_structure():
-    '''
+    """
     Data container
 
     Returns:
         dictionary:
             key: string containing data name and description of requirements
             value: lambda function checking compliance of requirements
-    '''
+    """
     data_structure = {
           'month (1-12)': is_month,
           'day (1-31)': is_day,

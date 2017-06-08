@@ -27,7 +27,7 @@ def start_module():
 
     menu_list = ['Show table of employees', 'Add employee to register',
                  'Remove employee from register', 'Update data of employee']
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    file_name = 'hr/persons.csv'
     error_message = 'Select number from 0 to 4, pointing the action you want to be done'
     title = 'Human Resources'
     table = data_manager.get_table_from_file(file_name)
