@@ -189,7 +189,11 @@ def start_module():
     file_path = 'accounting/items.csv'
 
     while user_input != '0':
-        table = data_manager.get_table_from_file(file_path)
+        try:
+            table = data_manager.get_table_from_file(file_path)
+        except FileNotFoundError:
+            ui.print_error_message('There is no data file')
+            table = []
 
         ui.print_menu(title, options, 'Return to main menu')
         user_input = ui.get_inputs(['Choose option'], '')[0]
