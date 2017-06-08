@@ -122,12 +122,13 @@ def check_email(e_mail):
     """
 
     is_correct = True
-    if len(e_mail) < 5:
+    if len(e_mail) < 5:  # checks email length
         is_correct = False
-    if '@' not in e_mail:
+    if '@' not in e_mail:   # checks if email contains '@'
         is_correct = False
     else:
         email_parts = e_mail.split('@')
+        # checks if email contains dot in second part
         if len(email_parts[0]) < 1 or '.' not in email_parts[1] or len(email_parts) > 2:
             is_correct = False
     if '.' not in e_mail:
@@ -136,6 +137,7 @@ def check_email(e_mail):
         email_parts = e_mail.split('.')
         if len(email_parts[-1]) < 1:
             is_correct = False
+    # checks if email parts contains at least 1 character
     if '@' in e_mail and '.' in e_mail:
         if len(e_mail.split('@')[1].split('.')[-2]) < 1:
             is_correct = False
