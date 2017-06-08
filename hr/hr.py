@@ -123,11 +123,13 @@ def add(table):
     Returns:
         Table with a new record
     """
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
     attribute_list = ['id', 'name', 'year of birth']
     a_person = [common.generate_random(table)]
 
     a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')
     table.append(a_person)
+    write_table_to_file(file_name, table)
 
     return table
 
@@ -148,6 +150,9 @@ def remove(table, id_):
         if table[i][0] == id_:
             table.remove(table[i])
             break
+    
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    write_table_to_file(file_name, table)
 
     return table
 
@@ -181,6 +186,9 @@ def update(table, id_):
 
     table.remove(table[removal_index])
     table.append(person)
+
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    write_table_to_file(file_name, table)
 
     return table
 
