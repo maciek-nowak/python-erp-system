@@ -56,7 +56,7 @@ def start_module():
             table = remove(table, id_)
 
         elif task_selection[0] == '4':
-            
+
             id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
             update(table, id_)
 
@@ -66,7 +66,7 @@ def start_module():
 
         elif task_selection[0] == '6':
             ui.print_result(get_persons_closest_to_average(table), 'Closest to average with age is ')
-        
+
         else:
             stay = False
 
@@ -93,7 +93,7 @@ def ask_for_id(table, what_for):
 def is_id_on_table(table, id_):
     '''
     function chcecks if table contain record of given id
-    
+
     Args:
         table: list of lists
 
@@ -160,7 +160,7 @@ def remove(table, id_):
         ui.print_error_message('no item of this id')
     else:
         table.pop(index_to_delete)
-    
+
     file_name = './hr/persons.csv'
     data_manager.write_table_to_file(file_name, table)
 
@@ -227,7 +227,7 @@ def get_oldest_person(table):
 
 # the question: Who is the closest to the average age ?
 # return type: list of strings (name or names if there are two more with the same value)
-def calculate_sum(values):
+def calculate_add(values):
     """Function calculates summary width of all table columns.
 
     Args:
@@ -249,9 +249,8 @@ def calculate_sum(values):
 def get_persons_closest_to_average(table):
     current_year = 2017
     ages = [current_year - int(record[2]) for record in table]
-    sum_ages = calculate_sum(ages)
+    sum_ages = calculate_add(ages)
     average_age = sum_ages / len(table)
-    print('average', average_age)
 
     names = []
     smallest_difference_to_avg = abs(current_year - int(table[0][2]) - average_age)
@@ -265,4 +264,3 @@ def get_persons_closest_to_average(table):
             names.append(record[1])
 
     return names
-
