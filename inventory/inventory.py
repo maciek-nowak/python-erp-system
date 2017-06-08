@@ -39,11 +39,11 @@ def start_module():
     while stay:
         ui.print_menu(title, menu_list, 'Back to main menu')
 
-        task_selection = ui.get_inputs([''], 'Please enter a number')
+        task_selection = ui.get_inputs([''], 'Please enter a number:')
 
         while not common.is_selection_proper(task_selection, len(menu_list)):
             ui.print_error_message(error_message)
-            task_selection = ui.get_inputs([''], 'Please enter a number')
+            task_selection = ui.get_inputs([''], 'Please enter a number:')
 
         if task_selection[0] == '1':
 
@@ -55,15 +55,16 @@ def start_module():
 
         elif task_selection[0] == '3':
 
-            id_ = ask_for_id(table, 'Please enter an id of game to remove')
+            id_ = ask_for_id(table, 'Please enter an id of game to remove:')
             table = remove(table, id_)
 
         elif task_selection[0] == '4':
-            id_ = ask_for_id(table, 'Please enter an id of game to be updated')
+            id_ = ask_for_id(table, 'Please enter an id of game to be updated:')
             update(table, id_)
 
         elif task_selection[0] == '5':
-            ui.print_table(get_available_items(table), ['id', 'name of game', 'company', 'year of realise', 'durability'])
+            ui.print_table(get_available_items(table),
+                           ['id', 'name of game', 'company', 'year of realise', 'durability'])
 
         elif task_selection[0] == '6':
             ui.print_result(get_average_durability_by_manufacturers(table), 'average durability by manufacturers ')
@@ -86,7 +87,7 @@ def ask_for_id(table, what_for):
 
     id_ = ui.get_inputs([''], what_for)[0]
     while not is_id_on_table(table, id_):
-        id_ = ui.get_inputs([], what_for)[0]
+        id_ = ui.get_inputs([''], what_for)[0]
 
     return id_
 
@@ -101,6 +102,7 @@ def is_id_on_table(table, id_):
     Returns:
         Boolean
     '''
+
     for i in range(len(table)):
         if table[i][0] == id_:     # IS IT PROPER?
             return True
@@ -136,7 +138,8 @@ def add(table):
     attribute_list = ['id', 'name of game', 'company', 'year of realise', 'durability']
     an_item = [common.generate_random(table)]
 
-    an_item += ui.get_inputs(['name of game', 'company', 'year of realise', 'durability'], 'Please, provide a game information')
+    an_item += ui.get_inputs(['name of game:', 'company:', 'year of release:', 'durability:'],
+                             'Please, provide a game information')
     table.append(an_item)
 
     file_name = 'inventory/inventory.csv'
@@ -212,6 +215,16 @@ def update(table, id_):
 #
 # @table: list of lists
 def get_available_items(table):
+    """
+    Returns list of data of items which have not exceededtheir durability.
+
+    Args:
+        table: list of lists of items
+
+    Returns:
+        durable: filtered list of lists
+    """
+
     current_year = 2017
     durable = [item for i, item in enumerate(table) if current_year - int(table[i][3]) <= int(table[i][4])]
 
@@ -227,6 +240,15 @@ def get_available_items(table):
 #
 # @table: list of lists
 def get_average_durability_by_manufacturers(table):
+    """
+    Returns dictionary of average durability for each manufacturer.
+
+    Args:
+        table: list of lists of items
+
+    Returns:
+        manufacturers_avg_durability: dictionary of manufacturer (str): avg_durability (float)
+    """
 
     manufacturers = []
     manufacturers_avg_durability = {}
@@ -242,6 +264,6 @@ def get_average_durability_by_manufacturers(table):
             if table[i][2] == man:
                 sum += int(table[i][4])
                 amount_of_stuff += 1
-        manufacturers_avg_durability[man] = sum/amount_of_stuff
+        manufacturers_avg_durability[man] = sum / amount_of_stuff
 
     return manufacturers_avg_durability
