@@ -71,7 +71,7 @@ def choose_option(option, table):
         table: list of list
     """
     if option == '1':
-        ui.print_result('\nPlease enter data for', '\nAdding new data')
+        ui.print_result('Please enter data for', 'Adding new data')
         return add(table)
     
     elif option == '2':

@@ -144,7 +144,7 @@ def choose_option(option, table):
     """
     
     if option == '1':
-        ui.print_result('\nPlease enter data for', '\n Adding new data')
+        ui.print_result('Please enter data for', 'Adding new data')
         return add(table)
 
     elif option == '2':
