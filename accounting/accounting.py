@@ -18,6 +18,75 @@ import data_manager
 import common
 
 
+def is_month(user_input):
+    """
+    Check correctnes of user input for month value
+
+    Args:
+        string: user input
+
+    Returns:
+        boolean
+    """
+
+    return user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 12
+
+
+def is_day(user_input):
+    """
+    Check correctnes of user input for month value
+
+    Args:
+        string: user input
+
+    Returns:
+        boolean
+    """
+
+    return user_input.isdigit() and int(user_input) >= 1 and int(user_input) <= 31
+
+def is_year(user_input):
+    """
+    Check correctnes of user input for day value
+
+    Args:
+        string: user input
+
+    Returns:
+        boolean
+    """
+
+    return user_input.isdigit() and int(user_input) >= 1900 and int(user_input) <= 9999
+
+
+def is_type(user_input):
+    """
+    Check correctnes of user input for day value
+
+    Args:
+        string: user input
+
+    Returns:
+        boolean
+    """
+
+    return user_input == 'in' or user_input == 'out'
+
+
+def is_ammount(user_input):
+    """
+    Check correctnes of user input for day value
+
+    Args:
+        string: user input
+
+    Returns:
+        boolean
+    """
+
+    return user_input.isdigit()
+
+
 def get_data_structure():
     '''
     Data container
@@ -27,15 +96,15 @@ def get_data_structure():
             key: string containing data name and description of requirements
             value: lambda function checking compliance of requirements
     '''
-    ds = {
-          'month (1-12)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 12,
-          'day (1-31)': lambda x: x.isdigit() and int(x) >= 1 and int(x) <= 31,
-          'year (1900-9999)': lambda x: x.isdigit() and int(x) >= 1900 and int(x) <= 9999,
-          'type (\'in\' or \'out\')': lambda x: x == 'in' or x == 'out',
-          'amount (dollar)': lambda x: x.isdigit()
-         }
+    data_structure = {
+          'month (1-12)': is_month,
+          'day (1-31)': is_day,
+          'year (1900-9999)': is_year,
+          'type (\'in\' or \'out\')': is_type,
+          'amount (dollar)': is_ammount 
+          }
 
-    return ds
+    return data_structure
 
 
 def ask_user_for_data(data_structure):
@@ -62,6 +131,47 @@ def ask_user_for_data(data_structure):
     return record
 
 
+def choose_option(option, table):
+    """
+    Switches options(functions, makes changes to the table
+
+    Args:
+        option: string
+        table: list of lists
+    Returns:
+        table: list of lists
+    """
+    
+    if option == '1':
+        ui.print_result('\nPlease enter data for', '\n Adding new data')
+        return add(table)
+
+    elif option == '2':
+        id_ = ui.get_inputs(['id: '], 'Which record you want to delete?')[0]
+        return remove(table, id_)
+
+    elif option == '3':
+        id_ = ui.get_inputs(['id: '], 'Which record you want to update?')[0]
+        return update(table, id_)
+
+    elif option == '4':
+        show_table(table)
+
+    elif option == '5':
+        result =  which_year_max(table)
+        ui.print_result(str(result), 'Year of maximum profit')
+
+    elif option == '6':
+        year = ui.get_inputs(['year'], 'Compute average profit for')[0]
+        result = avg_amount(table, year)
+        ui.print_result(str(result), 'Average profit for year ' + year + ': ')
+
+    else:
+        ui.print_error_message('Ther is no such option')
+
+    return table
+
+
 def start_module():
     """
     Starts this module and displays its menu.
@@ -73,33 +183,19 @@ def start_module():
     """
 
     title = 'Accounting menu'
-    options = ['add', 'remove', 'update', 'show table']
-    functions = [add, remove, update, show_table]
+    options = ['Add', 'Remove', 'Update', 'Show table', 'Year of maximum profit', 'Compute average profit']
     user_input = ''
+    file_path = 'accounting/items.csv'
 
     while user_input != '0':
-        # read data
-        table = data_manager.get_table_from_file('accounting/items.csv')
+        table = data_manager.get_table_from_file(file_path)
 
-        # UI
-        ui.print_menu(title, options, 'exit')
+        ui.print_menu(title, options, 'Return to main menu')
         user_input = ui.get_inputs(['Choose option'], '')[0]
 
-        # bulletproof
-        if user_input.isdigit() and int(user_input) <= len(options) and user_input != '0':
-            user_input = int(user_input)
+        table = choose_option(user_input, table)
 
-            # ask for id in remove and update functions
-            if(user_input == 2 or user_input == 3):
-                id_ = ui.get_inputs(['id'], '')[0]
-                functions[user_input-1](table, id_)
-
-            # don't ask for id in remove and update functions
-            else:
-                functions[user_input-1](table)
-
-        # writing data
-        data_manager.write_table_to_file('accounting/items.csv', table)
+        data_manager.write_table_to_file(file_path, table)
 
 
 def show_table(table):
@@ -176,7 +272,7 @@ def update(table, id_):
         table with updated record
     """
     # check is id_ exists in table
-    if find_index_by_id(table, id_) is None:
+    if common.find_index_by_id(table, id_) is None:
         ui.print_error_message('no such id')
         return table
 
@@ -213,11 +309,20 @@ def count_year_profit(table):
 
 # special functions:
 # ------------------
-
+# these coments gave me cancer
 # the question: Which year has the highest profit? (profit=in-out)
 # return the answer (number)
 
 def which_year_max(table):
+    """
+    Finds year of highest profit
+
+    Args:
+        table: list of lists
+    
+    Returns:
+        int: maximum year
+    """
 
     year_profit = count_year_profit(table)
     max_year = table[0][3]
@@ -232,6 +337,17 @@ def which_year_max(table):
 # the question: What is the average (per item) profit in a given year? [(profit)/(items count) ]
 # return the answer (number)
 def avg_amount(table, year):
+    """
+    Computes average profit in given year
+
+    Args:
+        table: list of lists
+        year: string 
+
+    Returns:
+        float: average profit
+    """
+
     year = str(year)
     years_profit = count_year_profit(table)
     year_transactions = 0
@@ -242,3 +358,4 @@ def avg_amount(table, year):
         return int(years_profit[year])/int(year_transactions)
     except KeyError:
         ui.print_error_message('no such year in database')
+        return 0.0
