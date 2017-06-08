@@ -63,7 +63,7 @@ def start_module():
             update(table, id_)
 
         elif task_selection[0] == '5':
-            ui.print_table(get_available_items(table), 'Available items')
+            ui.print_table(get_available_items(table), ['id', 'name of game', 'company', 'year of realise', 'durability'])
 
         elif task_selection[0] == '6':
             ui.print_result(get_average_durability_by_manufacturers(table), 'average durability by manufacturers ')
@@ -235,7 +235,7 @@ def get_average_durability_by_manufacturers(table):
         amount_of_stuff = 0
         for i in range(len(table)):
             if table[i][2] == man:
-                sum += table[i][4]
+                sum += int(table[i][4])
                 amount_of_stuff += 1
         manufacturers_avg_durability[man] = sum/amount_of_stuff
 
