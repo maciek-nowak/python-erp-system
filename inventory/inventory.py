@@ -41,8 +41,8 @@ def start_module():
         task_selection = ui.get_inputs([''], 'Please enter a number')
 
         while not common.is_selection_proper(task_selection, len(menu_list)):
-            task_selection = ui.get_inputs([''], 'Please enter a number')
             ui.print_error_message(error_message)
+            task_selection = ui.get_inputs([''], 'Please enter a number')
 
         if task_selection[0] == '1':
 
@@ -54,11 +54,11 @@ def start_module():
 
         elif task_selection[0] == '3':
 
-            id_ = ask_for_id(table, 'Please enter an id of person to remove')
+            id_ = ask_for_id(table, 'Please enter an id of game to remove')
             table = remove(table, id_)
 
         elif task_selection[0] == '4':
-            id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
+            id_ = ask_for_id(table, 'Please enter an id of game to be updated')
             update(table, id_)
 
         else:
@@ -126,7 +126,14 @@ def add(table):
         Table with a new record
     """
 
-    # your code
+    attribute_list = ['id', 'name of game', 'company', 'year of realise', 'amount']
+    an_item = [common.generate_random(table)]
+
+    an_item += ui.get_inputs(['name of game', 'company', 'year of realise', 'amount'], 'Please, provide a game information')
+    table.append(an_item)
+
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -143,7 +150,13 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            table.remove(table[i])
+            break
+
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -160,7 +173,26 @@ def update(table, id_):
         table with updated record
     """
 
-    # your code
+    for i in range(len(table)):
+        if table[i][0] == id_:
+            a_game = table[i]
+            removal_index = i
+            break
+
+    list_of_options = ['name of game', 'company', 'year of realise', 'amount']
+
+    option_selection = ui.get_inputs(list_of_options, "Do you want to update (y/n) : ")
+    for i in range(len(option_selection)):
+        if option_selection[i] == 'y' and i == 0:
+            a_game[i] = common.generate_random(table)
+        elif option_selection[i] == 'y':
+            a_game[i] = ui.get_inputs([list_of_options[i]], "New {} is ".format(list_of_options[i]))[0]
+
+    table.remove(table[removal_index])
+    table.append(a_game)
+
+    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/inventory/inventory.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 

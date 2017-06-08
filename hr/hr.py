@@ -27,7 +27,7 @@ def start_module():
 
     menu_list = ['Show table of employees', 'Add employee to register',
                  'Remove employee from register', 'Update data of employee']
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    file_name = './persons.csv'
     error_message = 'Select number from 0 to 4, pointing the action you want to be done'
     title = 'Human Resources'
     table = data_manager.get_table_from_file(file_name)
@@ -39,8 +39,8 @@ def start_module():
         task_selection = ui.get_inputs(['Please enter a number'], '')
 
         while not common.is_selection_proper(task_selection, len(menu_list)):
-            task_selection = ui.get_inputs(['Please enter a number'], '')
             ui.print_error_message(error_message)
+            task_selection = ui.get_inputs(['Please enter a number'], '')
 
         if task_selection[0] == '1':
 
@@ -123,13 +123,13 @@ def add(table):
     Returns:
         Table with a new record
     """
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
+    file_name = './hr/persons.csv'
     attribute_list = ['id', 'name', 'year of birth']
     a_person = [common.generate_random(table)]
 
     a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')
     table.append(a_person)
-    write_table_to_file(file_name, table)
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -151,8 +151,8 @@ def remove(table, id_):
             table.remove(table[i])
             break
     
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
-    write_table_to_file(file_name, table)
+    file_name = './hr/persons.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -187,8 +187,8 @@ def update(table, id_):
     table.remove(table[removal_index])
     table.append(person)
 
-    file_name = '/home/wera/codecool/python-lightweight-erp-project-zrzedliwy-starszy-pan-i-dzieciaki/hr/persons.csv'
-    write_table_to_file(file_name, table)
+    file_name = './hr/persons.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 

@@ -57,7 +57,11 @@ def is_selection_proper(task_selection, max_possible_choice):
     Returns:
         task_selection: list (len(list)=1) cappable to navigate tghrough the program
     '''
-    if int(task_selection[0]) not in range(max_possible_choice + 1):
+    try:
+        if int(task_selection[0]) not in range(max_possible_choice + 1):
+            return False
+        else:
+            return True
+            
+    except ValueError:
         return False
-    else:
-        return True
