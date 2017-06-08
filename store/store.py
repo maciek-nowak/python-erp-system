@@ -18,20 +18,32 @@ import common
 
 def get_data_structure():
     """
+    Data container
+
+    Returns:
+        data_structure: dictionary
+            key: data name
+            value: lambda returns True if input meets requirements
     """
-    ds = {
+    data_structure = {
           'title': lambda x: True,
           'manufacturer': lambda x: True,
           'price (dollars)': lambda x: x.isdigit(),
           'in stock (amount)': lambda x: x.isdigit()
         }
 
-    return ds
+    return data_structure
 
 
 def ask_user_for_data(data_structure):
     """
+    Recieves data from user
 
+    Args:
+        data_structure: dictionary
+
+    Returns:
+        record: list
     """
 
     record = []
@@ -47,6 +59,46 @@ def ask_user_for_data(data_structure):
     return record
 
 
+def choose_option(option, table):
+    """
+    Switches options(functions), makes changes to table
+
+    Args:
+        option: string
+        table: list of list
+
+    Returns:
+        table: list of list
+    """
+    if option == '1':
+        ui.print_result('\nPlease enter data for', '\nAdding new data')
+        return add(table)
+    
+    elif option == '2':
+        id_ = ui.get_inputs(['id: '], 'Which record you want to delete?')[0]
+        return remove(table, id_)
+
+    elif option == '3':
+        id_ = ui.get_inputs(['id: '], 'Which record you want to update?')[0]
+        return update(table, id_)
+
+    elif option == '4':
+        show_table(table)
+
+    elif option == '5':
+        result = get_counts_by_manufacturers(table)
+        ui.print_result(result, 'Amounts of game by manufacturer: ')
+    
+    elif option == '6':
+        manufacturer = ui.get_inputs(['manufacturer: '], 'Counting average for')[0]
+        result = str(get_average_by_manufacturer(table, manufacturer))
+        ui.print_result(result, 'Average amount of games by ' + manufacturer + ':')
+
+    else:
+        ui.print_error_message('There is no such option')
+        
+    return table
+
 def start_module():
     """
     Starts this module and displays its menu.
@@ -58,33 +110,17 @@ def start_module():
     """
 
     title = 'Store menu'
-    options = ['add', 'remove', 'update', 'show table']
-    functions = [add, remove, update, show_table]
-    user_input = ''
+    options = ['Add', 'Remove', 'Update', 'Show table', 'Games by manufacturer', 'Average stock by manufacturer']
+    user_input = '' 
+    file_path = 'store/games.csv' 
 
     while user_input != '0':
-        # read data
-        table = data_manager.get_table_from_file('store/games.csv')
-
-        # UI
-        ui.print_menu(title, options, 'exit')
+        table = data_manager.get_table_from_file(file_path)
+        ui.print_menu(title, options, 'Return to main menu')
         user_input = ui.get_inputs(['Choose option'], '')[0]
+        table = choose_option(user_input, table)
+        data_manager.write_table_to_file(file_path, table) 
 
-        # bulletproof
-        if user_input.isdigit() and int(user_input) <= len(options) and user_input != '0':
-            user_input = int(user_input)
-
-            # ask for id in remove and update functions
-            if(user_input == 2 or user_input == 3):
-                id_ = ui.get_inputs(['id'], '')[0]
-                functions[user_input-1](table, id_)
-            
-            # don't ask for id in remove and update functions
-            else:
-                functions[user_input-1](table)
-
-        # writing data
-        data_manager.write_table_to_file('store/games.csv', table)
 
 def show_table(table):
     """
@@ -139,7 +175,6 @@ def remove(table, id_):
     """
 
     index_to_delete = common.find_index_by_id(table, id_)
-
     if index_to_delete is None:
         ui.print_error_message('no item of this id')
     else:
@@ -161,7 +196,9 @@ def update(table, id_):
     """
 
     # check is id_ exists in table
-    if common.find_index_by_id(table, id_) is None:
+    index_to_update = common.find_index_by_id(table, id_)
+
+    if index_to_update is None:
         ui.print_error_message('no such id')
         return table
 
@@ -187,6 +224,15 @@ def update(table, id_):
 # the question: How many different kinds of game are available of each manufacturer?
 # return type: a dictionary with this structure: { [manufacturer] : [count] }
 def get_counts_by_manufacturers(table):
+    """
+    Counts amount of game by each manufacturer
+
+    Args:
+        table: list of list
+
+    Returns:
+        dictionary
+    """
 
     result = {}
     for record in table:
@@ -200,10 +246,22 @@ def get_counts_by_manufacturers(table):
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
 def get_average_by_manufacturer(table, manufacturer):
-   
+    """
+    Compute average ammount of games in stock of a givn manufacturer
+
+    Args:
+        table: list of lists
+        manufacuter: string
+
+    Returns:
+        float 
+    """
     ammount_by_manufacturer = 0
     for record in table:
         if record[2] == manufacturer:
            ammount_by_manufacturer += int(record[4])
 
-    return ammount_by_manufacturer/get_counts_by_manufacturers(table)[manufacturer]
+    try:
+        return ammount_by_manufacturer/get_counts_by_manufacturers(table)[manufacturer]
+    except NameError:
+        ui.print_error_message('There is no such manufacturer')
