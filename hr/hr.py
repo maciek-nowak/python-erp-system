@@ -26,9 +26,9 @@ def start_module():
     """
 
     menu_list = ['Show table of employees', 'Add employee to register',
-                 'Remove employee from register', 'Update data of employee']
-    file_name = './persons.csv'
-    error_message = 'Select number from 0 to 4, pointing the action you want to be done'
+                 'Remove employee from register', 'Update data of employee', 'oldest', 'avg']
+    file_name = 'hr/persons.csv'
+    error_message = 'Select number from 0 to 6, pointing the action you want to be done'
     title = 'Human Resources'
     table = data_manager.get_table_from_file(file_name)
 
@@ -56,9 +56,17 @@ def start_module():
             table = remove(table, id_)
 
         elif task_selection[0] == '4':
+            
             id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
             update(table, id_)
 
+        elif task_selection[0] == '5':
+
+            ui.print_result(get_oldest_person(table), 'The oldest: ')
+
+        elif task_selection[0] == '6':
+            ui.print_result(get_persons_closest_to_average(table), 'Closest to average with age is ')
+        
         else:
             stay = False
 
@@ -202,23 +210,57 @@ def get_oldest_person(table):
 
     current_year = 2017   # OMG GDZIE JEST CZAS
     min_birth_year = current_year
-    old_peope = []
+    old_people = []
 
     for i in range(len(table)):
-        if table[i][2] < min_birth_year:
-            min_birth_year = table[i][2]
+        if int(table[i][2]) < min_birth_year:
+            min_birth_year = int(table[i][2])
 
     for i in range(len(table)):
-        if table[i][2] == min_birth_year:
-            old_peope.append(table[i][1])
+        if int(table[i][2]) == min_birth_year:
+            old_people.append(table[i][1])
 
-    return old_peope
+    return old_people
+
+
+# the question: Who is the closest to the average age ?
+# return type: list of strings (name or names if there are two more with the same value)
+def calculate_sum(values):
+    """Function calculates summary width of all table columns.
+
+    Args:
+        table_columns_width (list of int): list of table column width
+
+    Return:
+        total_width (int): summary width of all table columns
+    """
+    total = 0
+
+    for value in values:
+        total += value
+
+    return total
 
 
 # the question: Who is the closest to the average age ?
 # return type: list of strings (name or names if there are two more with the same value)
 def get_persons_closest_to_average(table):
+    current_year = 2017
+    ages = [current_year - int(record[2]) for record in table]
+    sum_ages = calculate_sum(ages)
+    average_age = sum_ages / len(table)
+    print('average', average_age)
 
-    # your code
+    names = []
+    smallest_difference_to_avg = abs(current_year - int(table[0][2]) - average_age)
+    for record in table:
+        difference_to_avg = abs(current_year - int(record[2]) - average_age)
 
-    pass
+        if difference_to_avg < smallest_difference_to_avg:
+            smallest_difference_to_avg = difference_to_avg
+            names = [record[1]]
+        elif difference_to_avg == smallest_difference_to_avg:
+            names.append(record[1])
+
+    return names
+
