@@ -165,7 +165,7 @@ def add(table):
     # append table by record
     table.append(record)
 
-    return table
+    pass
 
 
 def remove(table, id_):
@@ -186,7 +186,7 @@ def remove(table, id_):
     else:
         table.pop(index_to_delete)
 
-    return table
+    pass
 
 
 def update(table, id_):
@@ -221,7 +221,7 @@ def update(table, id_):
     table = remove(table, id_)
     table.append(record)
 
-    return table
+    pass
 
 
 # special functions:

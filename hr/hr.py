@@ -26,9 +26,9 @@ def start_module():
     """
 
     menu_list = ['Show table of employees', 'Add employee to register',
-                 'Remove employee from register', 'Update data of employee']
+                 'Remove employee from register', 'Update data of employee', 'oldest', 'avg']
     file_name = 'hr/persons.csv'
-    error_message = 'Select number from 0 to 4, pointing the action you want to be done'
+    error_message = 'Select number from 0 to 6, pointing the action you want to be done'
     title = 'Human Resources'
     table = data_manager.get_table_from_file(file_name)
 
@@ -39,8 +39,8 @@ def start_module():
         task_selection = ui.get_inputs(['Please enter a number'], '')
 
         while not common.is_selection_proper(task_selection, len(menu_list)):
-            task_selection = ui.get_inputs(['Please enter a number'], '')
             ui.print_error_message(error_message)
+            task_selection = ui.get_inputs(['Please enter a number'], '')
 
         if task_selection[0] == '1':
 
@@ -56,9 +56,17 @@ def start_module():
             table = remove(table, id_)
 
         elif task_selection[0] == '4':
+            
             id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
             update(table, id_)
 
+        elif task_selection[0] == '5':
+
+            ui.print_result(get_oldest_person(table), 'The oldest: ')
+
+        elif task_selection[0] == '6':
+            ui.print_result(get_persons_closest_to_average(table), 'Closest to average with age is ')
+        
         else:
             stay = False
 
@@ -77,7 +85,7 @@ def ask_for_id(table, what_for):
 
     id_ = ui.get_inputs([''], what_for)[0]
     while not is_id_on_table(table, id_):
-        id_ = ui.get_inputs([], what_for)[0]
+        id_ = ui.get_inputs([''], what_for)[0]
 
     return id_
 
@@ -123,11 +131,13 @@ def add(table):
     Returns:
         Table with a new record
     """
+    file_name = './hr/persons.csv'
     attribute_list = ['id', 'name', 'year of birth']
     a_person = [common.generate_random(table)]
 
     a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')
     table.append(a_person)
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -144,10 +154,15 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    for i in range(len(table)):
-        if table[i][0] == id_:
-            table.remove(table[i])
-            break
+    index_to_delete = common.find_index_by_id(table, id_)
+
+    if index_to_delete is None:
+        ui.print_error_message('no item of this id')
+    else:
+        table.pop(index_to_delete)
+    
+    file_name = './hr/persons.csv'
+    data_manager.write_table_to_file(file_name, table)
 
     return table
 
@@ -182,6 +197,9 @@ def update(table, id_):
     table.remove(table[removal_index])
     table.append(person)
 
+    file_name = './hr/persons.csv'
+    data_manager.write_table_to_file(file_name, table)
+
     return table
 
 
@@ -192,15 +210,59 @@ def update(table, id_):
 # return type: list of strings (name or names if there are two more with the same value)
 def get_oldest_person(table):
 
-    # your code
+    current_year = 2017   # OMG GDZIE JEST CZAS
+    min_birth_year = current_year
+    old_people = []
 
-    pass
+    for i in range(len(table)):
+        if int(table[i][2]) < min_birth_year:
+            min_birth_year = int(table[i][2])
+
+    for i in range(len(table)):
+        if int(table[i][2]) == min_birth_year:
+            old_people.append(table[i][1])
+
+    return old_people
+
+
+# the question: Who is the closest to the average age ?
+# return type: list of strings (name or names if there are two more with the same value)
+def calculate_sum(values):
+    """Function calculates summary width of all table columns.
+
+    Args:
+        table_columns_width (list of int): list of table column width
+
+    Return:
+        total_width (int): summary width of all table columns
+    """
+    total = 0
+
+    for value in values:
+        total += value
+
+    return total
 
 
 # the question: Who is the closest to the average age ?
 # return type: list of strings (name or names if there are two more with the same value)
 def get_persons_closest_to_average(table):
+    current_year = 2017
+    ages = [current_year - int(record[2]) for record in table]
+    sum_ages = calculate_sum(ages)
+    average_age = sum_ages / len(table)
+    print('average', average_age)
 
-    # your code
+    names = []
+    smallest_difference_to_avg = abs(current_year - int(table[0][2]) - average_age)
+    for record in table:
+        difference_to_avg = abs(current_year - int(record[2]) - average_age)
 
-    pass
+        if difference_to_avg < smallest_difference_to_avg:
+            smallest_difference_to_avg = difference_to_avg
+            names = [record[1]]
+        elif difference_to_avg == smallest_difference_to_avg:
+            names.append(record[1])
+
+    return names
+
