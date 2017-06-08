@@ -8,12 +8,15 @@
 # year: number
 # month,year and day combined gives the date the sale was made
 
+
+
 # importing everything you need
 import os
 # User interface module
 import ui
 # data manager module
 import data_manager
+
 # common module
 import common
 
@@ -27,10 +30,40 @@ def start_module():
     Returns:
         None
     """
-
-    # your code
-
-    pass
+    table = data_manager.get_table_from_file('sales/sales.csv')
+    while True:
+        options = ["Show table",
+                   "add table",
+                   "update table",
+                   "get id item with lowest price",
+                   "get item sold beetween date",
+                   "remove"]
+        ui.print_menu("Main menu", options, "Exit program")
+        try:
+            inputs = ui.get_inputs(["Please enter a number: "], "")
+            option = inputs[0]
+            if option == "1":
+                #ui.print_table(table,['ID','Name','price','month','day','year'])
+                show_table(table)
+            elif option == "2":
+                add(table)
+            elif option == "3":
+                id_ = ui.get_inputs(['give me id'],'Update by id')
+                update(table,id_[0])
+            elif option == "4":
+                ui.print_result(get_lowest_price_item_id(table),'Lowest price item: ')
+            elif option == "5":
+                #get_items_sold_between()
+                pass
+            elif option == "6":
+                id_ = ui.get_inputs(['give me id'],'remove by id')
+                remove(table,id_)
+            elif option == "0":
+                break
+            else:
+                raise KeyError("There is no such option.")
+        except KeyError as err:
+            ui.print_error_message(err)
 
 
 def show_table(table):
@@ -43,10 +76,9 @@ def show_table(table):
     Returns:
         None
     """
+    title_list = ['id', 'name', 'price', 'month', 'day', 'year']
+    ui.print_table(table, title_list)
 
-    # your code
-
-    pass
 
 
 def add(table):
@@ -59,8 +91,32 @@ def add(table):
     Returns:
         Table with a new record
     """
+    inputs = ['ID','name','price','month','day','year']
+    item_to_add = ui.get_inputs(inputs,'Items to add, please enter ur data')
+    try:
+        if int(item_to_add[2]) > 13 and int(item_to_add[2]) < 1:
+            msg = 'wrong month structure: '
+            msg += str(item_to_add[2])
+            ui.print_error_message(msg)
+            return 0
+        if int(item_to_add[3]) > 31 and int(item_to_add[3]) < 1:
+            msg = 'wrong day structure: '
+            msg += str(item_to_add[3])
+            ui.print_error_message(msg)
+            return 0
+        if int(item_to_add[4]) > 9999 and int(item_to_add[4]) < 1970:
+            msg = 'wrong year structure: '
+            msg += str(item_to_add[4])
+            ui.print_error_message(msg)
+            return 0
+    except ValueError as err:
+        ui.print_error_message(err)
 
-    # your code
+
+    table.append(item_to_add)
+    data_manager.write_table_to_file('sales/sales.csv', table)
+
+
 
     return table
 
@@ -77,8 +133,25 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    # your code
+    delete = False
+    index = 0
+    id_ = str(id_[0])
+    print(id_)
+    try:
+        while table and index != len(table):
+            if table[index][0] == id_:
+                del table[index]
+                data_manager.write_table_to_file('sales/sales.csv', table)# FILENAME EVERYONE GOT THEIR OWN FILENAME!
+                return table
+            index += 1
+    except:
+        msg = 'Cannot delete item with id: '
+        msg += str(id_)
+        ui.print_error_message(msg)
 
+    msg = 'Item not deleted. Propably your id is not here. ID: '
+    msg += str(id_)
+    ui.print_error_message(msg)
     return table
 
 
@@ -93,8 +166,40 @@ def update(table, id_):
     Returns:
         table with updated record
     """
+    update_items = []
+    #szukamy id
+    for lists in table:
+        if lists[0] == id_:
+            inputs = ['ID','name','price','month','day','year']
+            item_to_add = ui.get_inputs(inputs,'Item to update, please enter ur data')
+            print(item_to_add)
+            try:
+                if int(item_to_add[3]) > 13 or int(item_to_add[3]) < 1:
+                    msg = 'wrong month structure: '
+                    msg += str(item_to_add[2])
+                    ui.print_error_message(msg)
+                    return 0
+                if int(item_to_add[4]) > 31 or int(item_to_add[4]) < 1:
+                    msg = 'wrong day structure: '
+                    msg += str(item_to_add[3])
+                    ui.print_error_message(msg)
+                    return 0
+                if int(item_to_add[5]) > 9999 or int(item_to_add[5]) < 1970:
+                    msg = 'wrong year structure: '
+                    msg += str(item_to_add[4])
+                    ui.print_error_message(msg)
+                    return 0
+            except ValueError as err:
+                ui.print_error_message(err)
+                return 0
 
-    # your code
+            remove(table,id_)
+            table.append(item_to_add)
+
+            data_manager.write_table_to_file('sales/sales.csv', table)
+
+
+    #data_manager.write_table_to_file('sales/sales.csv', table):
 
     return table
 
@@ -107,9 +212,14 @@ def update(table, id_):
 # if there are more than one with the lowest price, return the first by descending alphabetical order
 def get_lowest_price_item_id(table):
 
-    # your code
+    min = table[0][2]
+    id_lower_price = 0
+    for index in range(len(table)-1):
+        if table[index][2] < min:
+            min = table[index][2]
+            id_lower_price = table[index][0]
 
-    pass
+    return id_lower_price
 
 
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
