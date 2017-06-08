@@ -73,25 +73,26 @@ def choose_option(option, table):
     Returns:
         table: list of list
     """
+
     if option == '1':
+        show_table(table)
+
+    elif option == '2':
         ui.print_result('Please enter data for', 'Adding new data')
         return add(table)
-    
-    elif option == '2':
+
+    elif option == '3':
         id_ = ui.get_inputs(['id: '], 'Which record you want to delete?')[0]
         return remove(table, id_)
 
-    elif option == '3':
+    elif option == '4':
         id_ = ui.get_inputs(['id: '], 'Which record you want to update?')[0]
         return update(table, id_)
-
-    elif option == '4':
-        show_table(table)
 
     elif option == '5':
         result = get_counts_by_manufacturers(table)
         ui.print_result(result, 'Amounts of game by manufacturer: ')
-    
+
     elif option == '6':
         manufacturer = ui.get_inputs(['manufacturer: '], 'Counting average for')[0]
         result = str(get_average_by_manufacturer(table, manufacturer))
@@ -99,7 +100,7 @@ def choose_option(option, table):
 
     else:
         ui.print_error_message('There is no such option')
-        
+
     return table
 
 
@@ -114,9 +115,9 @@ def start_module():
     """
 
     title = 'Store menu'
-    options = ['Add', 'Remove', 'Update', 'Show table', 'Games by manufacturer', 'Average stock by manufacturer']
-    user_input = '' 
-    file_path = 'store/games.csv' 
+    options = ['Show table', 'Add', 'Remove', 'Update', 'Games by manufacturer', 'Average stock by manufacturer']
+    user_input = ''
+    file_path = 'store/games.csv'
 
     while user_input != '0':
         try:
@@ -128,7 +129,7 @@ def start_module():
         ui.print_menu(title, options, 'Return to main menu')
         user_input = ui.get_inputs(['Choose option'], '')[0]
         table = choose_option(user_input, table)
-        data_manager.write_table_to_file(file_path, table) 
+        data_manager.write_table_to_file(file_path, table)
 
 
 def show_table(table):
@@ -252,6 +253,7 @@ def get_counts_by_manufacturers(table):
             result[manufacturer] = 1
     return result
 
+
 # the question: What is the average amount of games in stock of a given manufacturer?
 # return type: number
 def get_average_by_manufacturer(table, manufacturer):
@@ -263,7 +265,7 @@ def get_average_by_manufacturer(table, manufacturer):
         manufacuter: string
 
     Returns:
-        float 
+        float
     """
     ammount_by_manufacturer = 0
     for record in table:
