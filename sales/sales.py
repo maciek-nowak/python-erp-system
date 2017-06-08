@@ -15,7 +15,6 @@ import os
 import ui
 # data manager module
 import data_manager
-
 # common module
 import common
 
@@ -29,14 +28,16 @@ def start_module():
     Returns:
         None
     """
+
     table = data_manager.get_table_from_file('sales/sales.csv')
     while True:
         options = ["Show table",
-                   "add table",
-                   "update table",
-                   "get id item with lowest price",
-                   "get item sold beetween date",
-                   "remove"]
+                   "Add table",
+                   "Remove",
+                   "Update table",
+                   "Get id item with lowest price",
+                   "Get item sold beetween date"
+                   ]
         ui.print_menu("Main menu", options, "Exit program")
         try:
             inputs = ui.get_inputs(["Please enter a number: "], "")
@@ -45,19 +46,19 @@ def start_module():
                 show_table(table)
             elif option == "2":
                 add(table)
-            elif option == "3":
+            elif option == "4":
                 id_ = ui.get_inputs(['give me id'], 'Update by id')
                 update(table, id_[0])
-            elif option == "4":
-                ui.print_result(get_lowest_price_item_id(table), 'Lowest price item: ')
             elif option == "5":
+                ui.print_result(get_lowest_price_item_id(table), 'Lowest price item: ')
+            elif option == "6":
                 between_solds_inputs = ui.get_inputs(
                     ['Month from', 'Day from', 'Year from', 'Month to', 'Day to', 'Year to'], 'Give me this data')
                 cycki = get_items_sold_between(table, between_solds_inputs[0], between_solds_inputs[1],
                                                between_solds_inputs[2], between_solds_inputs[3],
                                                between_solds_inputs[4], between_solds_inputs[5])
                 show_table(cycki)
-            elif option == "6":
+            elif option == "3":
                 id_ = ui.get_inputs(['give me id'], 'remove by id')
                 remove(table, id_)
             elif option == "0":
@@ -78,6 +79,7 @@ def show_table(table):
     Returns:
         None
     """
+
     title_list = ['id', 'name', 'price', 'month', 'day', 'year']
     ui.print_table(table, title_list)
 
@@ -92,6 +94,7 @@ def add(table):
     Returns:
         Table with a new record
     """
+
     inputs = ['name', 'price', 'month', 'day', 'year']
     item_to_add = ui.get_inputs(inputs, 'Items to add, please enter ur data')
     try:
@@ -164,11 +167,12 @@ def update(table, id_):
     Returns:
         table with updated record
     """
+
     update_items = []
     # szukamy id
     for lists in table:
         if lists[0] == id_:
-            inputs = ['ID', 'name', 'price', 'month', 'day', 'year']
+            inputs = ['ID:', 'name:', 'price:', 'month:', 'day:', 'year:']
             item_to_add = ui.get_inputs(inputs, 'Item to update, please enter ur data')
             try:
                 if int(item_to_add[3]) > 13 or int(item_to_add[3]) < 1:
@@ -215,11 +219,12 @@ def get_lowest_price_item_id(table):
         Returns:
             Id of item with lowest price
     """
-    min = table[0][2]
+
+    min_value = table[0][2]
     id_lower_price = 0
     for index in range(len(table)-1):
-        if table[index][2] < min:
-            min = table[index][2]
+        if table[index][2] < min_value:
+            min_value = table[index][2]
             id_lower_price = table[index][0]
 
     return id_lower_price
