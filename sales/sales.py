@@ -213,7 +213,16 @@ def update(table, id_):
 # return type: string (id)
 # if there are more than one with the lowest price, return the first by descending alphabetical order
 def get_lowest_price_item_id(table):
-''' Function returns ID of item with lower price '''
+    """
+    Returning id with lowest price
+
+        Args:
+            table: list in which record we should look for lowest price
+            table (list): table to look for lowest price
+
+        Returns:
+            Id of item with lowest price
+    """
     min = table[0][2]
     id_lower_price = 0
     for index in range(len(table)-1):
@@ -227,7 +236,22 @@ def get_lowest_price_item_id(table):
 # the question: Which items are sold between two given dates ? (from_date < sale_date < to_date)
 # return type: list of lists (the filtered table)
 def get_items_sold_between(table, month_from, day_from, year_from, month_to, day_to, year_to):
-    ''' Function returns list of lists with date that is between args '''
+    """
+        Filtering table with date that is between input dates
+
+        Args:
+            table: list in which record should program look for records
+            month_from: month date we would like to start looking for
+            day_from: day date we would like to start looking for
+            year_from: year date we would like to start looking for
+            month_to: month date that we would like to stop looking for
+            day_to: day date that we would like to stop looking for
+            year_to: year date that we would like to stop looking for
+
+        Returns:
+            list of lists thats are filtered from/to dates
+    """
+
     items_sold_between = [];
     index = 0
     start_date = year_from + month_from + day_from
