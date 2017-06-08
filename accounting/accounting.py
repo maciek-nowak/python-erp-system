@@ -119,7 +119,10 @@ def ask_user_for_data(data_structure):
     """
 
     record = []
-    for key in data_structure:
+
+    order = ['month (1-12)', 'day (1-31)', 'year (1900-9999)', 'type (\'in\' or \'out\')', 'amount (dollar)']
+
+    for key in order:
 
         # ask user for input specific data
         user_input = ui.get_inputs([key], '')[0]
