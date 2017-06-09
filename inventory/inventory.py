@@ -55,14 +55,14 @@ def start_module():
 
         elif task_selection[0] == '3':
 
-            id_ = ui.get_inputs(table, 'Please enter an id of game to remove:')
+            id_ = ui.get_inputs([''], 'Please enter an id of game to remove:')
             if is_id_on_table(table, id_):
                 table = remove(table, id_)
             else:
                 ui.print_error_message('There is no such id')
 
         elif task_selection[0] == '4':
-            id_ = ui.get_inputs(table, 'Please enter an id of game to be updated:')
+            id_ = ui.get_inputs([''], 'Please enter an id of game to be updated:')
             if is_id_on_table(table, id_):
                 update(table, id_)
             else:
@@ -166,10 +166,17 @@ def remove(table, id_):
         Table without specified record.
     """
 
-    for i in range(len(table)):
+    '''for i in range(len(table)):
         if table[i][0] == id_:
             table.remove(table[i])
-            break
+            break'''
+
+    index_to_delete = common.find_index_by_id(table, id_)
+
+    if index_to_delete is None:
+        ui.print_error_message('no item of this id')
+    else:
+        table.pop(index_to_delete)
 
     file_name = 'inventory/inventory.csv'
     data_manager.write_table_to_file(file_name, table)
