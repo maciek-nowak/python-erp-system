@@ -26,7 +26,8 @@ def start_module():
     """
 
     menu_list = ['Show table of employees', 'Add employee to register',
-                 'Remove employee from register', 'Update data of employee', 'oldest', 'avg']
+                 'Remove employee from register', 'Update data of employee',
+                 'Show oldest employee', 'Show employee with age closest to average']
     file_name = 'hr/persons.csv'
     error_message = 'Select number from 0 to 6, pointing the action you want to be done'
     title = 'Human Resources'
