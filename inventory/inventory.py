@@ -55,12 +55,18 @@ def start_module():
 
         elif task_selection[0] == '3':
 
-            id_ = ask_for_id(table, 'Please enter an id of game to remove:')
-            table = remove(table, id_)
+            id_ = ui.get_inputs(table, 'Please enter an id of game to remove:')
+            if is_id_on_table(table, id_):
+                table = remove(table, id_)
+            else:
+                ui.print_error_message('There is no such id')
 
         elif task_selection[0] == '4':
-            id_ = ask_for_id(table, 'Please enter an id of game to be updated:')
-            update(table, id_)
+            id_ = ui.get_inputs(table, 'Please enter an id of game to be updated:')
+            if is_id_on_table(table, id_):
+                update(table, id_)
+            else:
+                ui.print_error_message('There is no such id')
 
         elif task_selection[0] == '5':
             ui.print_table(get_available_items(table),

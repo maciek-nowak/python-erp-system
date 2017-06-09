@@ -53,13 +53,19 @@ def start_module():
 
         elif task_selection[0] == '3':
 
-            id_ = ask_for_id(table, 'Please enter an id of person to remove')
-            table = remove(table, id_)
+            id_ = ui.get_inputs([''], 'Please enter an id of person to remove')[0]
+            if is_id_on_table(table, id_):
+                table = remove(table, id_)
+            else:
+                ui.print_error_message('There is no such id')
 
         elif task_selection[0] == '4':
 
-            id_ = ask_for_id(table, 'Please enter an id of person whos data going to be updated')
-            update(table, id_)
+            id_ = ui.get_inputs([''], 'Please enter an id of person whos data going to be updated')[0]
+            if is_id_on_table(table, id_):
+                table = update(table, id_)
+            else:
+                ui.print_error_message('There is no such id')
 
         elif task_selection[0] == '5':
 
@@ -70,25 +76,6 @@ def start_module():
 
         else:
             stay = False
-
-
-def ask_for_id(table, what_for):
-    '''
-    asks for for id, checks if it exists in table
-
-    Args:
-        table: list of lists
-        what_for: (str) exmpl; 'Please enter an id of person to remove'
-
-    Returns:
-        id_: str
-    '''
-
-    id_ = ui.get_inputs([''], what_for)[0]
-    while not is_id_on_table(table, id_):
-        id_ = ui.get_inputs([''], what_for)[0]
-
-    return id_
 
 
 def is_id_on_table(table, id_):
@@ -136,7 +123,7 @@ def add(table):
     attribute_list = ['id', 'name', 'year of birth']
     a_person = [common.generate_random(table)]
 
-    a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')
+    a_person += ui.get_inputs(['name and surname', 'year of birth'], 'Please, provide personal information')   #how to secure year?
     table.append(a_person)
     data_manager.write_table_to_file(file_name, table)
 
